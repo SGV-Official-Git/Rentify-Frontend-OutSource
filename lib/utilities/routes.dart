@@ -6,7 +6,9 @@ import 'package:rentify/views/auth/otp_verify.dart';
 import 'package:rentify/views/auth/register.dart';
 import 'package:rentify/views/auth/splash.dart';
 import 'package:rentify/views/properties/property_details.dart';
+import 'package:rentify/views/tenant/collect_rent_screen.dart';
 import 'package:rentify/views/tenant/tenant_list_screen.dart';
+import 'package:rentify/views/tenant/tenant_profile_screen.dart';
 
 import '../views/dashboard/dashboard.dart';
 import '../views/expense/expense_list.dart';
@@ -27,6 +29,8 @@ class Routes {
   static const propertiesList = "/propertiesList";
   static const tenantListScreen = "/tenantListScreen";
   static const expenseListScreen = "/expenseListScreen";
+  static const tenantProfileScreen = "/tenantProfileScreen";
+  static const collectRentScreen = "/collectRentScreen";
 
   static final routes = <String, WidgetBuilder>{
     splash: (context) => Builder(builder: (context) {
@@ -44,6 +48,8 @@ class Routes {
     otpVerify: (context) => const OtpVerify(),
     propertiesList: (context) => const PropertyListScreen(),
     tenantListScreen: (context) => const TenantListScreen(),
+    tenantProfileScreen: (context) => const TenantProfile(),
     expenseListScreen: (context) => const ExpenseListScreen(),
+    collectRentScreen: (context) => const CollectRent(),
   };
 }

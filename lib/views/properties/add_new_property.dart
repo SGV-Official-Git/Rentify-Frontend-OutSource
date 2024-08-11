@@ -1,10 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rentify/api/endpoints.dart';
+import 'package:rentify/data/property_item_modal.dart' as pim;
 import 'package:rentify/data/property_list_item.dart';
 import 'package:rentify/gen/assets.gen.dart';
 import 'package:rentify/main.dart';
@@ -32,6 +34,7 @@ class AddNewProperty extends StatefulWidget {
 
 class _AddNewPropertyState extends State<AddNewProperty> {
   File? propertyImage;
+  String? propertyEditImage;
 
   bool isEdit = false;
 
@@ -44,17 +47,45 @@ class _AddNewPropertyState extends State<AddNewProperty> {
   final formkey = GlobalKey<FormState>();
 
   List<PropertyRoomDetail> roomDetail = [PropertyRoomDetail([], "", "", "")];
-
+pim.PropertyItem? propertyDetail;
   @override
   void initState() {
     super.initState();
     Future.microtask(() async {
       await context.read<PropertyProvider>().getPropertyType();
       await context.read<PropertyProvider>().getPropertyAssets();
+
       setState(() {
-        isEdit = ModalRoute.of(context)?.settings.arguments as bool;
+         final arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    isEdit = arguments['isEdit'];
+    propertyDetail = arguments['propertyItem'];
       });
+   setEditData();  
     });
+  }
+
+  setEditData(){
+    if(propertyDetail != null){
+      propertyEditImage = propertyDetail?.propertyImage ?? '';
+name = propertyDetail?.propertyName ?? '';
+context.read<PropertyProvider>().propertyTypes.forEach((element) {
+ if (element.id == propertyDetail?.propertyType){
+propertyItem = element ;}
+
+},);
+address =propertyDetail?.propertyAddress ?? ''; 
+managerName =propertyDetail?.propertyMangerName ?? '';
+managerContact = propertyDetail?.propertyMangerCont ?? ''; 
+selectedPropertyAssets =propertyDetail?.propertyAmenities ?? [];
+roomDetail.clear();
+propertyDetail?.propertyRoomDetails?.forEach((element){
+  log("roomNumber ${element.roomNumber}");
+  log("roomBeds ${element.roomBeds}");
+roomDetail.add(PropertyRoomDetail(element.roomAmenities ?? [], element.roomNumber ?? '', element.roomStatus ?? '', element.roomBeds ?? ''));
+},);
+log("${propertyDetail?.propertyImage}");
+log("${propertyDetail?.propertyRoomDetails}");
+    }
   }
 
   @override
@@ -83,7 +114,8 @@ class _AddNewPropertyState extends State<AddNewProperty> {
                     child: propertyImage == null ||
                             propertyImage?.path.isEmpty == true
                         ? ImageWidget(
-                            url: Assets.icons.addImgOfProperty,
+
+                            url:isEdit?"${Endpoints.imageUrl}${propertyEditImage!}": Assets.icons.addImgOfProperty,
                             width: dimensions.width,
                           )
                         : AspectRatio(
@@ -95,6 +127,7 @@ class _AddNewPropertyState extends State<AddNewProperty> {
                           )),
                 SizedBox(height: dimensions.width * 0.03),
                 CustomTextField(
+                  // controller: TextEditingController(text: name),
                   textInputType: TextInputType.name,
                   label: "Property Name *",
                   validator: (p0) => Validation.instance.emptyField(p0),
@@ -106,9 +139,9 @@ class _AddNewPropertyState extends State<AddNewProperty> {
                 SizedBox(height: dimensions.width * 0.03),
                 Consumer<PropertyProvider>(builder: (context, val, _) {
                   if (val.propertyTypes.isNotEmpty) {
-                    //  propertyItem = val.propertyTypes[0];
                     return CustomTextField<PropertyTypeItem>(
                       isDropdown: true,
+                     value: propertyItem,
                       onChanged: (p0) {
                         final propertType = p0 as PropertyTypeItem;
                         propertyItem = propertType;
@@ -124,6 +157,7 @@ class _AddNewPropertyState extends State<AddNewProperty> {
                 }),
                 SizedBox(height: dimensions.width * 0.03),
                 CustomTextField(
+                  controller: TextEditingController(text: address),
                   textInputType: TextInputType.multiline,
                   label: "Property Address *",
                   validator: (p0) => Validation.instance.emptyField(p0),
@@ -134,6 +168,7 @@ class _AddNewPropertyState extends State<AddNewProperty> {
                 ),
                 SizedBox(height: dimensions.width * 0.03),
                 CustomTextField(
+                  controller: TextEditingController(text: managerName),
                   textInputType: TextInputType.name,
                   label: "Manager Name *",
                   validator: (p0) => Validation.instance.emptyField(p0),
@@ -144,6 +179,7 @@ class _AddNewPropertyState extends State<AddNewProperty> {
                 ),
                 SizedBox(height: dimensions.width * 0.03),
                 CustomTextField(
+                  controller: TextEditingController(text: managerContact),
                   textInputType: TextInputType.phone,
                   label: "Manager Contact *",
                   hintText: "Enter Manager Contact",
@@ -214,6 +250,7 @@ class _AddNewPropertyState extends State<AddNewProperty> {
                               children: [
                                 Expanded(
                                     child: CustomTextField(
+                                      controller: TextEditingController(text:roomDetail[index].roomNumber ),
                                         validator: (p0) =>
                                             Validation.instance.emptyField(p0),
                                         icon: Assets.icons.roomNumber,
@@ -227,6 +264,7 @@ class _AddNewPropertyState extends State<AddNewProperty> {
                                 ),
                                 Expanded(
                                     child: CustomTextField(
+                                      controller: TextEditingController(text: roomDetail[index].totalBeds),
                                   validator: (p0) =>
                                       Validation.instance.emptyField(p0),
                                   textInputType: TextInputType.number,

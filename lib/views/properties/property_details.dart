@@ -214,7 +214,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                 SizedBox(height: dimensions.width * 0.05),
                 CustomButton(
                   onPressed: () => AppNavigator.shared.pushNamed(
-                      routeName: Routes.addNewProperty, arguments: true),
+                      routeName: Routes.addNewProperty, arguments: {'isEdit': true, 'propertyItem': propertyItem},),
                   title: "Edit",
                 ),
                 SizedBox(height: dimensions.width * 0.05),

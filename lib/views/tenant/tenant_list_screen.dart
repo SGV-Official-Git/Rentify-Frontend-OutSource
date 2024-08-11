@@ -49,6 +49,9 @@ class _TenantListScreenState extends State<TenantListScreen> {
       body: Consumer<TenantProvider>(
         builder: (context, value, child) => ListView.separated(
             itemBuilder: (context, index) => TenantListTile(
+                  onTap: () => AppNavigator.shared.pushNamed(
+                      routeName: Routes.tenantProfileScreen,
+                      arguments: value.tenantList[index]),
                   image:
                       "${Endpoints.imageUrl}${value.tenantList[index].tenantImage}",
                   address: value.tenantList[index].tenantPAddress ?? "",

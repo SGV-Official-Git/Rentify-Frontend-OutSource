@@ -50,7 +50,8 @@ class _AddNewTenantState extends State<AddNewTenant> {
 
   File? tenantImage, ducumentImage;
 
-  PropertyItem? property;
+  PropertyItem? 
+  property;
   RentFrequency? rentFrequency;
   RoomAndrBedItem? roomAndrBedItem;
   String? roomNumber;
@@ -105,6 +106,17 @@ class _AddNewTenantState extends State<AddNewTenant> {
                   hintText: "\$ 0.00",
                   icon: Assets.icons.navCollectionActive,
                 ),
+                  SizedBox(height: dimensions.width * 0.03),
+                CustomTextField(
+                  validator: (p0) => Validation.instance.emptyField(p0),
+                  label: "Deposite Amount *",
+                  hintText: "Enter Deposite Amount",
+                  textInputType: TextInputType.number,
+                  icon: Assets.icons.navCollectionActive,
+                  onChanged: (p0) => setState(() {
+                    depositeAmount = p0;
+                  }),
+                ),
                 SizedBox(height: dimensions.width * 0.03),
                 CustomTextField(
                   label: "Mobile Number *",
@@ -129,17 +141,7 @@ class _AddNewTenantState extends State<AddNewTenant> {
                     emContactNumber = p0;
                   }),
                 ),
-                SizedBox(height: dimensions.width * 0.03),
-                CustomTextField(
-                  validator: (p0) => Validation.instance.emptyField(p0),
-                  label: "Deposite Amount *",
-                  hintText: "Enter Deposite Amount",
-                  textInputType: TextInputType.number,
-                  icon: Assets.icons.navCollectionActive,
-                  onChanged: (p0) => setState(() {
-                    depositeAmount = p0;
-                  }),
-                ),
+            
                 SizedBox(height: dimensions.width * 0.03),
                 CustomTextField(
                   onChanged: (p0) => setState(() {

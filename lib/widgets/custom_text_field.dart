@@ -15,7 +15,7 @@ class CustomTextField<T> extends StatelessWidget {
   final String? hintText, icon, trailingIcon, label;
   final List<dynamic>? items;
   final String selectedItem;
-
+final T? value; 
   final void Function(dynamic)? onChanged;
   final VoidCallback? onPressed, onLeadingPress;
   final bool obsecure, isDropdown, readOnly;
@@ -26,6 +26,8 @@ class CustomTextField<T> extends StatelessWidget {
       this.validator,
       this.onChanged,
       this.label,
+          this.value,
+
       this.onLeadingPress,
       this.onPressed,
       this.items,
@@ -57,6 +59,7 @@ class CustomTextField<T> extends StatelessWidget {
               height: dimensions.width * 0.015,
             ),
           DropdownButtonFormField<T>(
+            value:  value,
               iconEnabledColor: Colors.transparent,
               decoration: InputDecoration(
                   prefixIconConstraints:
@@ -83,6 +86,7 @@ class CustomTextField<T> extends StatelessWidget {
                   items?.length ?? 0,
                   (index) => DropdownMenuItem(
                       value: items?[index],
+                      
                       child: Row(
                         children: [
                           if (icon != null)

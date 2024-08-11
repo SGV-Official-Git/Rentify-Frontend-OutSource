@@ -217,6 +217,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/workspace.svg
   String get workspace => 'assets/icons/workspace.svg';
 
+  /// File path: assets/icons/polygon_icon.svg
+  String get polygon => 'assets/icons/polygon_icon.svg';
+
   /// List of all assets
   List<String> get values => [
         logo,
